@@ -1,0 +1,54 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+  <![endif]-->
+  <style>
+    html, body {width:100%; height:100%; padding: 0; margin: 0;}
+    #cartodb-map { width: 100%; height:100%; background: black;}
+  </style>
+
+  <script>
+    var map;
+    function init(){
+      // initiate leaflet map
+      map = new L.Map('cartodb-map', { 
+        center: [0,20],
+        zoom: 4
+      })
+      L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
+        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a><br>Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+      }).addTo(map);
+
+      var layerUrl = 'https://afterfibre.cartodb.com/api/v2/viz/08a7281e-24e0-11e5-8cfa-0e0c41326911/viz.json';
+
+      cartodb.createLayer(map, layerUrl)
+      .addTo(map)
+      .on('done', function(layer) {
+        }).on('error', function() {
+          //log the error
+      });
+    }
+  </script>
+  <!-- Header include and title are below -->
+  <!--#set var="pagetitle" value="NSRC: Map of African Terrestrial Fibre Networks" -->
+  <!--#include virtual="/include/header.html" -->
+  <link rel="stylesheet" href="/css/afterfibre.css" />
+</head>
+<body onload="init()">
+  <!-- Banner include goes here -->
+  <!--#include virtual="/include/banner.html" -->
+  <!-- ****** PAGE CONTENT GOES HERE -->
+  <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
+  <div id='cartodb-map'></div>
+
+  <!-- Footer include here -->
+  <!--#include virtual="/include/footer.html" -->
+  <!-- END FOOTER  -->
+  </div>  <!-- page -->
+  </div>  <!-- page-wrapper -->
+</body>
+</html>

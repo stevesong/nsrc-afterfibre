@@ -1,0 +1,36 @@
+<div id="uobanner-container-black">
+	<div id="uobanner" style='max-width: 100%;'>
+    	<div id="uobanner-logobox"><a href="https://www.uoregon.edu">
+        	<img src="https://drupal.nsrc.org/sites/all/modules/uobanner/images/uologo.png" alt='University of Oregon.' height='35' width='216' /></a>
+        </div>
+       	<div id="uobanner-links">
+        	<span class="uobanner-text-right"><a href="https://www.uoregon.edu" class="uobanner-uonav">UO Home</a>&nbsp; | &nbsp;
+            <a href="https://www.uoregon.edu/azindex/" class="uobanner-uonav">Dept Index</a></span>
+        </div>
+    </div>
+</div>
+
+<div id="page-wrapper">
+  <div id="page" class="container page ssc-n ssw-b ssa-l sss-n btc-n btw-b bta-l bts-n ntc-n ntw-b nta-l nts-n ctc-n ctw-b cta-l cts-n ptc-n ptw-b pta-l pts-n at-mt">
+
+<div id="menu-bar" style="text-align: left;" class="nav clearfix"><section id="block-block-7" class="block block-block menu-wrapper menu-bar-wrapper clearfix odd first block-count-1 block-region-menu-bar block-7" >  
+      <h2 class="element-invisible block-title">Logo</h2>
+  
+  <a href="https://drupal.nsrc.org/" title="Network Startup Resource Center">
+  <img src="https://drupal.nsrc.org/sites/default/files/nsrc-main-logo-transparent.png" alt="nsrc logo" /></a>
+  </section><nav id="block-system-main-menu" class="block block-system block-menu no-title menu-wrapper menu-bar-wrapper clearfix even block-count-2 block-region-menu-bar block-main-menu"  role="navigation">  
+  
+  <ul class="menu clearfix"><li class="first leaf menu-depth-1 menu-item-236"><a href="/" title="" class="active"><span>HOME</span></a></li><li class="leaf menu-depth-1 menu-item-385"><a href="https://drupal.nsrc.org/about" title=""><span>ABOUT</span></a></li><li class="leaf menu-depth-1 menu-item-386"><a href="https://drupal.nsrc.org/activities" title=""><span>ACTIVITIES</span></a></li><li class="leaf menu-depth-1 menu-item-387"><a href="https://drupal.nsrc.org/news" title=""><span>NEWS</span></a></li><li class="leaf menu-depth-1 menu-item-389"><a href="https://drupal.nsrc.org/supporters" title=""><span>SUPPORTERS</span></a></li><li class="last leaf menu-depth-1 menu-item-390"><a href="https://drupal.nsrc.org/calendar" title=""><span>CALENDAR</span></a></li></ul>
+  </nav><div id="block-search-form" class="block block-search no-title menu-wrapper menu-bar-wrapper clearfix odd last block-count-3 block-region-menu-bar block-form"  role="search">  
+  
+  <form action="/" method="post" id="search-block-form" accept-charset="UTF-8"><div><div class="container-inline">
+      <h2 class="element-invisible">Search form</h2>
+    <div class="form-item form-type-textfield form-item-search-block-form">
+  <label class="element-invisible" for="edit-search-block-form--2">Search </label>
+ <input title="Enter the terms you wish to search for." type="search" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128" class="form-text" />
+</div>
+<div class="form-actions form-wrapper" id="edit-actions"><input type="submit" id="edit-submit" name="op" value="Search" class="form-submit" /></div><input type="hidden" name="form_build_id" value="form-Nz8Tktwwjks2QNDkVYz9K0-nlgoXhgTQ9cJrXHxceog" />
+<input type="hidden" name="form_id" value="search_block_form" />
+</div>
+</div></form>
+  </div></div>  

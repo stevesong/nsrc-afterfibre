@@ -1,0 +1,110 @@
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+  <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+  <![endif]-->
+  <style>
+    html, body {width:100%; height:100%; padding: 0; margin: 0;}
+    #cartodb-map { width: 100%; height:100%; background: black;}
+  </style>
+
+
+  <script type="infowindow/html" id="afterinfo">
+    <div class="cartodb-popup">
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+       <div class="cartodb-popup-content-wrapper">
+         <div class="cartodb-popup-header">
+           <h3>Fibre</h3>
+         </div>
+         <div class="cartodb-popup-content">
+           <!-- content.data contains the field info -->
+           <h4>City: {{content.data.phase_name}}</h4>
+           <p></p>
+         </div>
+       </div>
+       <div class="cartodb-popup-tip-container"></div>
+    </div>
+  </script>
+
+
+  <!-- Header include and title are below -->
+  <!--#set var="pagetitle" value="NSRC: Map of African Terrestrial Fibre Networks" -->
+  <link rel="stylesheet" href="/css/afterfibre.css" />
+</head>
+
+<body>
+  <!-- Banner include goes here -->
+  <!-- ****** PAGE CONTENT GOES HERE -->
+  <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
+  <div id='cartodb-map'></div>
+
+
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+  <script type="text/javascript">
+    function main() {
+        var layerSource = {
+          user_name: 'afterfibre',
+          type: 'cartodb',
+          sublayers: [{
+              sql: "SELECT af_fibrephase.*,af_organisation.name FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
+              cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #00FFFF;} #af_fibrephase[live=true]{line-color: #FFFF00;} #af_fibrephase[live=null]{line-color: #FF00FF;}',
+              interactivity: ['cartodb_id','phase_name']
+          },
+          {
+              sql: "SELECT * FROM auc", // undersea cables
+              cartocss: '#auc{polygon-opacity: 0;line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
+          }]
+        };
+
+      // Choose center and zoom level
+      var options = {
+        center: [0, 20], // Africa
+        zoom: 4
+      };
+      
+      // Instantiate map on specified DOM element
+      var map_object = new L.Map('cartodb-map', options);
+      
+      // Add basemap to the map object just created
+      L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
+        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a><br>Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+        }).addTo(map_object);
+
+      var aftOptions = {
+        https: true, // Africa
+        legends: false
+      };
+
+      cartodb.createLayer(map_object, layerSource, aftOptions)
+        .addTo(map_object)
+        .on('done', function(layer) {
+          // do stuff
+          var aftLayer = layer.getSubLayer(0);
+          aftLayer.setInteraction(true);
+          aftLayer.setInteractivity('cartodb_id,phase_name');
+          // show infowindows on click
+          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name'], { infowindowTemplate: $('#afterinfo').html() });
+          // set up legend  
+          var aftLegend = new cdb.geo.ui.Legend.Custom({
+            title: "Fibre Status",
+            data: [
+              { name: "Live",               value: "#58A062" },
+              { name: "Under Construction", value: "#F07971" }
+            ]
+          });
+          $('#map_object').append(aftLegend.render().el);
+        })
+        .on('error', function(err) {
+          // report error
+          console.log("An error occurred: " + err);
+        });
+    }
+    window.onload = main;
+  </script>
+</body>
+</html>
