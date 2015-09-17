@@ -12,29 +12,48 @@
     html, body {width:100%; height:100%; padding: 0; margin: 0;}
     #cartodb-map { width: 100%; height:100%; background: black;}
   </style>
+  <link rel="stylesheet" href="/css/afterfibre.css" />
 
 
-  <script type="infowindow/html" id="afterinfo">
-    <div class="cartodb-popup">
+  <script type="infowindow/html" id="aftinfo">
+    <div class="cartodb-popup v2 orange">
       <a href="#close" class="cartodb-popup-close-button close">x</a>
-       <div class="cartodb-popup-content-wrapper">
-         <div class="cartodb-popup-header">
-           <h3>Fibre</h3>
-         </div>
-         <div class="cartodb-popup-content">
-           <!-- content.data contains the field info -->
-           <h4>City: {{content.data.phase_name}}</h4>
-           <p></p>
-         </div>
-       </div>
-       <div class="cartodb-popup-tip-container"></div>
+      <div class="cartodb-popup-content-wrapper">
+        <div class="cartodb-popup-header">
+          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px"><span><img src="/flag/{{iso2}}.png"> </span><a href="{{weburl}}" target="_blank">{{operator}}</a></h4>
+        </div>
+        <div class="cartodb-popup-content">
+          <!-- content.data contains the field info -->
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Phase <span style="font-size: 12px; color: orange; margin-top: 6px;">{{phase_name}}<span></h4>
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Country <span style="font-size: 12px; color: orange; margin-top: 6px;">{{country}}<span></h4>
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Live date <span style="font-size: 12px; color: orange; margin-top: 6px;">{{go_live}}<span></h4>
+          <p></p>
+        </div>
+      </div>
+      <div class="cartodb-popup-tip-container"></div>
+    </div>
+  </script>
+  <script type="infowindow/html" id="aucinfo">
+    <div class="cartodb-popup v2 orange">
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+      <div class="cartodb-popup-content-wrapper">
+        <div class="cartodb-popup-header">
+          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px">AUC</h4>
+        </div>
+        <div class="cartodb-popup-content">
+          <!-- content.data contains the field info -->
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Phase <span style="font-size: 12px; color: orange; margin-top: 6px;">{{phase_name}}<span></h4>
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Country <span style="font-size: 12px; color: orange; margin-top: 6px;">{{country}}<span></h4>
+          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Live date <span style="font-size: 12px; color: orange; margin-top: 6px;">{{go_live}}<span></h4>
+          <p></p>
+        </div>
+      </div>
+      <div class="cartodb-popup-tip-container"></div>
     </div>
   </script>
 
-
   <!-- Header include and title are below -->
   <!--#set var="pagetitle" value="NSRC: Map of African Terrestrial Fibre Networks" -->
-  <link rel="stylesheet" href="/css/afterfibre.css" />
 </head>
 
 <body>
@@ -51,9 +70,9 @@
           user_name: 'afterfibre',
           type: 'cartodb',
           sublayers: [{
-              sql: "SELECT af_fibrephase.*,af_organisation.name FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
-              cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #00FFFF;} #af_fibrephase[live=true]{line-color: #FFFF00;} #af_fibrephase[live=null]{line-color: #FF00FF;}',
-              interactivity: ['cartodb_id','phase_name']
+              sql: "SELECT af_fibrephase.*,af_organisation.name as orgname, af_organisation.web_url as weburl FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
+              cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #FFAA00;} #af_fibrephase[live=true]{line-color: #FFFF00;}',
+              interactivity: ['cartodb_id','phase_name','operator','owner','iso2','orgname']
           },
           {
               sql: "SELECT * FROM auc", // undersea cables
@@ -64,7 +83,8 @@
       // Choose center and zoom level
       var options = {
         center: [0, 20], // Africa
-        zoom: 4
+        zoom: 4,
+        legends: true
       };
       
       // Instantiate map on specified DOM element
@@ -72,12 +92,15 @@
       
       // Add basemap to the map object just created
       L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
-        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a><br>Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a>'
         }).addTo(map_object);
 
+      // hack to display custom attribution until CartoDB issue resolved
+      L.control.attribution({position: 'topright', prefix: ''}).addTo(map_object);
+      
       var aftOptions = {
         https: true, // Africa
-        legends: false
+        legends: true
       };
 
       cartodb.createLayer(map_object, layerSource, aftOptions)
@@ -85,19 +108,27 @@
         .on('done', function(layer) {
           // do stuff
           var aftLayer = layer.getSubLayer(0);
+          var aucLayer = layer.getSubLayer(1);
           aftLayer.setInteraction(true);
           aftLayer.setInteractivity('cartodb_id,phase_name');
+          aucLayer.setInteraction(true);
+          aucLayer.setInteractivity('cartodb_id');
+
+          //aftLayer.on('featureClick',function(event, latlng, pos, data, layerIndex) {
+          //    console.log(data);
+          //});
           // show infowindows on click
-          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name'], { infowindowTemplate: $('#afterinfo').html() });
+          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name','operator','owner','orgname','iso2','country','go_live','weburl'], { infowindowTemplate: $('#aftinfo').html() });
+          cdb.vis.Vis.addInfowindow(map_object, aucLayer, ['cartodb_id'], { infowindowTemplate: $('#aucinfo').html() });
           // set up legend  
           var aftLegend = new cdb.geo.ui.Legend.Custom({
             title: "Fibre Status",
             data: [
-              { name: "Live",               value: "#58A062" },
-              { name: "Under Construction", value: "#F07971" }
+              { name: "Live",               value: "#FFFF00" },
+              { name: "Under Construction", value: "#FFAA00" }
             ]
           });
-          $('#map_object').append(aftLegend.render().el);
+          $('#cartodb-map').append(aftLegend.render().el);
         })
         .on('error', function(err) {
           // report error
