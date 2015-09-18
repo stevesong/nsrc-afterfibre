@@ -20,14 +20,36 @@
       <a href="#close" class="cartodb-popup-close-button close">x</a>
       <div class="cartodb-popup-content-wrapper">
         <div class="cartodb-popup-header">
-          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px"><span><img src="/flag/{{iso2}}.png"> </span><a href="{{weburl}}" target="_blank">{{operator}}</a></h4>
+          <div class="rTableTitle">
+              <div class="rTableRow">
+                <div class="rTableCell"><img src="/flag/{{iso2}}.png"></div><div class="rTableCellTitle"><h4 style="font-size: larger;"><a href="{{weburl}}" target="_blank">{{operator}}</a></h4></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="cartodb-popup-content">
           <!-- content.data contains the field info -->
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Phase <span style="font-size: 12px; color: orange; margin-top: 6px;">{{phase_name}}<span></h4>
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Country <span style="font-size: 12px; color: orange; margin-top: 6px;">{{country}}<span></h4>
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Live date <span style="font-size: 12px; color: orange; margin-top: 6px;">{{go_live}}<span></h4>
-          <p></p>
+           <div class="rTable">
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Phase</h4></div><div class="rTableCell">{{phase_name}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Country</h4></div><div class="rTableCell">{{country}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Owner</h4></div><div class="rTableCell">{{orgname}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Type</h4></div><div class="rTableCell">{{type}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">In Service</h4></div><div class="rTableCell">{{go_live}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Source</h4></div><div class="rTableCell"><a href="{{source_url}}" target="_blank">map</a></div>
+            </div>
+            <p></p>
+          </div>
         </div>
       </div>
       <div class="cartodb-popup-tip-container"></div>
@@ -38,14 +60,25 @@
       <a href="#close" class="cartodb-popup-close-button close">x</a>
       <div class="cartodb-popup-content-wrapper">
         <div class="cartodb-popup-header">
-          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px">AUC</h4>
+          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px"><a href="{{url1}}" target="_blank">{{name}}</a></h4>
         </div>
+
         <div class="cartodb-popup-content">
           <!-- content.data contains the field info -->
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Phase <span style="font-size: 12px; color: orange; margin-top: 6px;">{{phase_name}}<span></h4>
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Country <span style="font-size: 12px; color: orange; margin-top: 6px;">{{country}}<span></h4>
-          <h4 style="color: green; text-transform: none; font-size: 12px; font-weight: normal">Live date <span style="font-size: 12px; color: orange; margin-top: 6px;">{{go_live}}<span></h4>
-          <p></p>
+          <div class="rTable">
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Capacity</h4></div><div class="rTableCell">{{capacity_g}} Gbps</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Length</h4></div><div class="rTableCell">{{distance_k}} km</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">In Service</h4></div><div class="rTableCell">{{inservice}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Notes</h4></div><div class="rTableCell">{{notes}}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cartodb-popup-tip-container"></div>
@@ -60,8 +93,7 @@
   <!-- Banner include goes here -->
   <!-- ****** PAGE CONTENT GOES HERE -->
   <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
-  <div id='cartodb-map'></div>
-
+    <div id='cartodb-map'></div>
 
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
   <script type="text/javascript">
@@ -96,7 +128,7 @@
         }).addTo(map_object);
 
       // hack to display custom attribution until CartoDB issue resolved
-      L.control.attribution({position: 'topright', prefix: ''}).addTo(map_object);
+      // L.control.attribution({position: 'topright', prefix: ''}).addTo(map_object);
       
       var aftOptions = {
         https: true, // Africa
@@ -110,7 +142,7 @@
           var aftLayer = layer.getSubLayer(0);
           var aucLayer = layer.getSubLayer(1);
           aftLayer.setInteraction(true);
-          aftLayer.setInteractivity('cartodb_id,phase_name');
+          aftLayer.setInteractivity('cartodb_id,phase_name,iso2,weburl,operator');
           aucLayer.setInteraction(true);
           aucLayer.setInteractivity('cartodb_id');
 
@@ -118,8 +150,9 @@
           //    console.log(data);
           //});
           // show infowindows on click
-          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name','operator','owner','orgname','iso2','country','go_live','weburl'], { infowindowTemplate: $('#aftinfo').html() });
-          cdb.vis.Vis.addInfowindow(map_object, aucLayer, ['cartodb_id'], { infowindowTemplate: $('#aucinfo').html() });
+          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name','operator','owner','orgname','iso2','country','go_live','weburl','source_url','type'], { infowindowTemplate: $('#aftinfo').html() });
+          cdb.vis.Vis.addInfowindow(map_object, aucLayer, ['cartodb_id','capacity_g','name','inservice','notes','distance_k','url1','notlive'], { infowindowTemplate: $('#aucinfo').html() });
+
           // set up legend  
           var aftLegend = new cdb.geo.ui.Legend.Custom({
             title: "Fibre Status",
@@ -129,6 +162,16 @@
             ]
           });
           $('#cartodb-map').append(aftLegend.render().el);
+
+
+          var aftTooltip = new cdb.geo.ui.Tooltip({
+              layer: layer,
+              template: '<div class="cartodb-tooltip-content-wrapper"> <div class="rTable"><div class="rTableRow"><div class="rTableCell"><img src="/flag/{{iso2}}.png"></div><div class="rTableCellTitle"><h4 style="font-size: larger;"><a href="{{weburl}}" target="_blank">{{operator}}</a></h4></div></div></div></div>', 
+              width: 200,
+              position: 'bottom|right'
+          });
+          $('#cartodb-map').append(aftTooltip.render().el);
+          
         })
         .on('error', function(err) {
           // report error

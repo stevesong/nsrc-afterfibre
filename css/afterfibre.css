@@ -1,9 +1,48 @@
-h2.afterfibre {
+h2.afterfibre
+{
     margin: 2px;
 }
-h2.block-title {
-	margin-top: 10px;
+h2.block-title
+{
+    margin-top: 10px;
 }
-div.nav {
-	margin-bottom: 0;
+div.nav
+{
+    margin-bottom: 0;
+}
+.rTableTitle
+{
+    display: table;
+    width: 100%;
+}
+.rTable
+{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.rTableRow
+{
+    display: table-row;
+}
+.rTableCell
+{
+    display: table-cell;
+    padding: 0 0px;
+    border: 0;
+}
+.rTableCellRight
+{
+    display: table-cell;
+    padding: 0 0px;
+    text-align: right; 
+    border: 0;
+    width: 40%;
+}
+.rTableCellTitle
+{
+    display: table-cell;
+    padding: 0 0px;
+    text-align: center; 
+    border: 0;
 }
