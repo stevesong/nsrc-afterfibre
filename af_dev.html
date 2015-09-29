@@ -95,7 +95,7 @@
   <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
     <div id='cartodb-map'></div>
 
-  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
         var layerSource = {
@@ -108,7 +108,7 @@
           },
           {
               sql: "SELECT * FROM auc", // undersea cables
-              cartocss: '#auc{polygon-opacity: 0;line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
+              cartocss: '#auc{line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
           }]
         };
 
@@ -144,7 +144,7 @@
           aftLayer.setInteraction(true);
           aftLayer.setInteractivity('cartodb_id,phase_name,iso2,weburl,operator');
           aucLayer.setInteraction(true);
-          aucLayer.setInteractivity('cartodb_id');
+          aucLayer.setInteractivity('cartodb_id','name');
 
           //aftLayer.on('featureClick',function(event, latlng, pos, data, layerIndex) {
           //    console.log(data);
@@ -163,14 +163,20 @@
           });
           $('#cartodb-map').append(aftLegend.render().el);
 
-
           var aftTooltip = new cdb.geo.ui.Tooltip({
               layer: aftLayer,
-              template: '<div class="cartodb-tooltip-content-wrapper"> <div class="rTable"><div class="rTableRow"><div class="rTableCell"><img src="/flag/{{iso2}}.png"></div><div class="rTableCellTitle"><h4 style="font-size: larger;"><a href="{{weburl}}" target="_blank">{{operator}}</a></h4></div></div></div></div>', 
-              width: 200,
+              template: '<div class="cartodb-tooltip-content-wrapper"><img src="/flag/{{iso2}}.png"> <b>{{operator}}</b></div>', 
+              width: 600,
+              height: 50,
               position: 'bottom|right'
           });
           $('#cartodb-map').append(aftTooltip.render().el);
+
+          var aucTooltip = new cdb.geo.ui.Tooltip({
+              layer: aucLayer,
+              template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>'
+          });
+          $('#cartodb-map').append(aucTooltip.render().el);
           
         })
         .on('error', function(err) {
