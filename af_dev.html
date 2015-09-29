@@ -98,19 +98,38 @@
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
-        var layerSource = {
-          user_name: 'afterfibre',
-          type: 'cartodb',
-          sublayers: [{
-              sql: "SELECT af_fibrephase.*,af_organisation.name as orgname, af_organisation.web_url as weburl FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
-              cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #FFAA00;} #af_fibrephase[live=true]{line-color: #FFFF00;}',
-              interactivity: ['cartodb_id','phase_name','operator','owner','iso2','orgname']
-          },
-          {
-              sql: "SELECT * FROM auc", // undersea cables
-              cartocss: '#auc{line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
-          }]
-        };
+      var layerSource = {
+        user_name: 'afterfibre',
+        type: 'cartodb',
+        sublayers: [{
+            sql: "SELECT af_fibrephase.*,af_organisation.name as orgname, af_organisation.web_url as weburl FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
+            cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #A6CEE3;} #af_fibrephase[live=true]{line-color: #1F78B4;}',
+            interactivity: ['cartodb_id','phase_name','operator','owner','iso2','orgname']
+        },
+        {
+            sql: "SELECT * FROM auc", // undersea cables
+            cartocss: '#auc{line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
+        }]
+      };
+
+      var af_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
+      var af_polyline;
+
+      // function to highlight the selected polyline when clicked on
+      function showFeature(cartodb_id) {
+        af_sql.execute("select the_geom from af_fibrephase where cartodb_id = {{cartodb_id}}", {cartodb_id: cartodb_id} ).done(function(geojson) {
+          if (af_polyline) {
+            map_object.removeLayer(af_polyline);
+          }
+          af_polyline = L.geoJson(geojson, { 
+            style: {
+              color: "#0AF",
+              weight: 6,
+              opacity: 0.3
+            }
+          }).addTo(map_object);
+        });
+      }
 
       // Choose center and zoom level
       var options = {
@@ -163,6 +182,7 @@
           });
           $('#cartodb-map').append(aftLegend.render().el);
 
+          // mouseover information for terrestrial fibre
           var aftTooltip = new cdb.geo.ui.Tooltip({
               layer: aftLayer,
               template: '<div class="cartodb-tooltip-content-wrapper"><img src="/flag/{{iso2}}.png"> <b>{{operator}}</b></div>', 
@@ -172,6 +192,12 @@
           });
           $('#cartodb-map').append(aftTooltip.render().el);
 
+          // highlight the selected polyline when clicked on
+          layer.on('featureClick', function(e, pos, latlng, data) {
+            showFeature(data.cartodb_id);
+          });
+
+          // mouseover information for undersea fibre
           var aucTooltip = new cdb.geo.ui.Tooltip({
               layer: aucLayer,
               template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>'
