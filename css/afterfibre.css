@@ -46,3 +46,11 @@ div.nav
     text-align: center; 
     border: 0;
 }
+div.cartodb-popup.v2 {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+div.cartodb-tooltip-content-wrapper {
+    padding: 5px;
+}
