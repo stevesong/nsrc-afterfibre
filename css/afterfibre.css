@@ -51,6 +51,14 @@ div.cartodb-popup.v2 {
     padding: 5px;
 }
 
-div.cartodb-tooltip-content-wrapper {
-    padding: 5px;
+div.cartodb-popup.v2 img {
+    padding: 0;
 }
+
+div.cartodb-tooltip-content-wrapper {
+    padding: 5px !important;
+}
+
+div.cartodb-tooltip-content-wrapper img {
+    padding: 0 !important;
+} 

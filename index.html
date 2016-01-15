@@ -1,7 +1,9 @@
 <html>
 <head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
   <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
-  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
 
   <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
@@ -10,45 +12,225 @@
     html, body {width:100%; height:100%; padding: 0; margin: 0;}
     #cartodb-map { width: 100%; height:100%; background: black;}
   </style>
+  <link rel="stylesheet" href="/css/afterfibre.css" />
 
-  <script>
-    var map;
-    function init(){
-      // initiate leaflet map
-      map = new L.Map('cartodb-map', { 
-        center: [0,20],
-        zoom: 4
-      })
-      L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
-        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a><br>Mapbox <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
-      }).addTo(map);
-
-      var layerUrl = 'https://afterfibre.cartodb.com/api/v2/viz/08a7281e-24e0-11e5-8cfa-0e0c41326911/viz.json';
-
-      cartodb.createLayer(map, layerUrl)
-      .addTo(map)
-      .on('done', function(layer) {
-        }).on('error', function() {
-          //log the error
-      });
-    }
+  <script type="infowindow/html" id="aftinfo">
+    <div class="cartodb-popup v2 orange">
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+      <div class="cartodb-popup-content-wrapper">
+        <div class="cartodb-popup-header">
+          <div class="rTableTitle">
+              <div class="rTableRow">
+                <div class="rTableCell"><img src="/flag/{{iso2}}.png"></div><div class="rTableCellTitle"><h4 style="font-size: larger;"><a href="{{weburl}}" target="_blank">{{operator}}</a></h4></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cartodb-popup-content">
+          <!-- content.data contains the field info -->
+           <div class="rTable">
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Phase</h4></div><div class="rTableCell">{{phase_name}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Country</h4></div><div class="rTableCell">{{country}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Owner</h4></div><div class="rTableCell">{{orgname}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Type</h4></div><div class="rTableCell">{{type}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">In Service</h4></div><div class="rTableCell">{{go_live}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Source</h4></div><div class="rTableCell"><a href="{{source_url}}" target="_blank">map</a></div>
+            </div>
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <div class="cartodb-popup-tip-container"></div>
+    </div>
   </script>
+  <script type="infowindow/html" id="aucinfo">
+    <div class="cartodb-popup v2 orange">
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+      <div class="cartodb-popup-content-wrapper">
+        <div class="cartodb-popup-header">
+          <h4 style="margin-left: -15px; margin-right: -15px; width: auto; margin-top: -15px; padding: 14px; text-align:center; color:green; font-weight: normal; text-transform: none; font-size: 20px"><a href="{{url1}}" target="_blank">{{name}}</a></h4>
+        </div>
+
+        <div class="cartodb-popup-content">
+          <!-- content.data contains the field info -->
+          <div class="rTable">
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Capacity</h4></div><div class="rTableCell">{{capacity_g}} Gbps</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Length</h4></div><div class="rTableCell">{{distance_k}} km</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">In Service</h4></div><div class="rTableCell">{{inservice}}</div>
+            </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Notes</h4></div><div class="rTableCell">{{notes}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cartodb-popup-tip-container"></div>
+    </div>
+  </script>
+
   <!-- Header include and title are below -->
   <!--#set var="pagetitle" value="NSRC: Map of African Terrestrial Fibre Networks" -->
   <!--#include virtual="/include/header.html" -->
-  <link rel="stylesheet" href="/css/afterfibre.css" />
 </head>
-<body onload="init()">
+
+<body>
   <!-- Banner include goes here -->
   <!--#include virtual="/include/banner.html" -->
   <!-- ****** PAGE CONTENT GOES HERE -->
-  <h2 class="afterfibre">Map of African Terrestrial and Undersea Fibre Networks</h2>
-  <div id='cartodb-map'></div>
+  <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
+    <div id='cartodb-map'></div>
 
   <!-- Footer include here -->
   <!--#include virtual="/include/footer.html" -->
   <!-- END FOOTER  -->
-  </div>  <!-- page -->
-  </div>  <!-- page-wrapper -->
+  </div></div>
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
+  <script type="text/javascript">
+    function main() {
+      var layerSource = {
+        user_name: 'afterfibre',
+        type: 'cartodb',
+        sublayers: [{
+            sql: "SELECT af_fibrephase.*,af_organisation.name as orgname, af_organisation.web_url as weburl FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
+            cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #D6301D;} #af_fibrephase[live=true]{line-color: #FF9900;}',
+            interactivity: ['cartodb_id','phase_name','operator','owner','iso2','orgname']
+        },
+        {
+            sql: "SELECT * FROM auc", // undersea cables
+            cartocss: '#auc{line-color: #EDF8FB;line-width: 2;line-opacity: 0.8;} #auc [ capacity_g <= 48000] {line-color: #005824;} #auc [ capacity_g <= 17000] {line-color: #238B45;} #auc [ capacity_g <= 4280] {line-color: #41AE76;} #auc [ capacity_g <= 1600] {line-color: #66C2A4;} #auc [ capacity_g <= 540] {line-color: #CCECE6;} #auc [ capacity_g <= 310] {line-color: #D7FAF4;} #auc [ capacity_g <= 60] {line-color: #EDF8FB;}'
+        }]
+      };
+
+      var af_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
+      var af_polyline;
+
+      // function to highlight the selected polyline when clicked on
+      function showFeature(cartodb_id) {
+        af_sql.execute("select the_geom from af_fibrephase where cartodb_id = {{cartodb_id}}", {cartodb_id: cartodb_id} ).done(function(geojson) {
+          if (af_polyline) {
+            map_object.removeLayer(af_polyline);
+          }
+          af_polyline = L.geoJson(geojson, { 
+            style: {
+              color: "#0AF",
+              weight: 6,
+              opacity: 0.3
+            }
+          }).addTo(map_object);
+        });
+      }
+
+      // Choose center and zoom level
+      var options = {
+        center: [0, 20], // Africa
+        zoom: 4,
+        legends: true
+      };
+      
+      // Instantiate map on specified DOM element
+      var map_object = new L.Map('cartodb-map', options);
+      
+      // Add basemap to the map object just created
+      L.tileLayer('https://dnv9my2eseobd.cloudfront.net/v3/cartodb.map-4xtxp73f/{z}/{x}/{y}.png', {
+        attribution: 'Undersea cable data courtesy <a href="http://cablemap.info">Greg Malknecht</a>'
+        }).addTo(map_object);
+
+      // hack to display custom attribution until CartoDB issue resolved
+      // L.control.attribution({position: 'topright', prefix: ''}).addTo(map_object);
+      
+      var aftOptions = {
+        https: true, // Africa
+        legends: true
+      };
+
+      cartodb.createLayer(map_object, layerSource, aftOptions)
+        .addTo(map_object)
+        .on('done', function(layer) {
+          // do stuff
+          var aftLayer = layer.getSubLayer(0);
+          var aucLayer = layer.getSubLayer(1);
+          aftLayer.setInteraction(true);
+          aftLayer.setInteractivity('cartodb_id,phase_name,iso2,weburl,operator');
+          aucLayer.setInteraction(true);
+          aucLayer.setInteractivity('cartodb_id','name');
+
+          //aftLayer.on('featureClick',function(event, latlng, pos, data, layerIndex) {
+          //    console.log(data);
+          //});
+          // show infowindows on click
+          cdb.vis.Vis.addInfowindow(map_object, aftLayer, ['cartodb_id','phase_name','operator','owner','orgname','iso2','country','go_live','weburl','source_url','type'], { infowindowTemplate: $('#aftinfo').html() });
+          cdb.vis.Vis.addInfowindow(map_object, aucLayer, ['cartodb_id','capacity_g','name','inservice','notes','distance_k','url1','notlive'], { infowindowTemplate: $('#aucinfo').html() });
+
+          // set up Undersea Cable legend
+          var aucLegend = new cdb.geo.ui.Legend.Choropleth({
+            title: "Undersea Fibre Optic Cables",
+            left:  "60Gbps",
+            right: "5Tbps",
+            colors: [ "#EDF8FB", "#D7FAF4", "#CCECE6", "#66C2A4", "#41AE76", "#238B45", "#005824" ]
+          });
+
+          // set up Terrestrial Fibre legend  
+          var aftLegend = new cdb.geo.ui.Legend.Custom({
+            title: "Terrestrial Fibre Status",
+            data: [
+              { name: "Live",               value: "#FF9900" },
+              { name: "Under Construction", value: "#D6301D" }
+            ]
+          });
+
+          // combine legends
+          var stackedLegend = new cdb.geo.ui.StackedLegend({
+           legends: [aftLegend, aucLegend]
+          });
+
+          // render legend on map
+          $('#cartodb-map').append(stackedLegend.render().el);
+
+          // mouseover information for terrestrial fibre
+          var aftTooltip = new cdb.geo.ui.Tooltip({
+              layer: aftLayer,
+              template: '<div class="cartodb-tooltip-content-wrapper"><img src="/flag/{{iso2}}.png"> <b>{{operator}}</b></div>', 
+              width: 600,
+              height: 50,
+              position: 'bottom|right'
+          });
+          $('#cartodb-map').append(aftTooltip.render().el);
+
+          // highlight the selected polyline when clicked on
+          layer.on('featureClick', function(e, pos, latlng, data) {
+            showFeature(data.cartodb_id);
+          });
+
+          // mouseover information for undersea fibre
+          var aucTooltip = new cdb.geo.ui.Tooltip({
+              layer: aucLayer,
+              template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>'
+          });
+          $('#cartodb-map').append(aucTooltip.render().el);
+          
+        })
+        .on('error', function(err) {
+          // report error
+          console.log("An error occurred: " + err);
+        });
+    }
+    window.onload = main;
+  </script>
 </body>
 </html>
