@@ -103,7 +103,7 @@
         type: 'cartodb',
         sublayers: [{
             sql: "SELECT af_fibrephase.*,af_organisation.name as orgname, af_organisation.web_url as weburl FROM af_fibrephase, af_organisation WHERE af_fibrephase.operator_id = af_organisation.organisation_id", // fibre phases
-            cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #A6CEE3;} #af_fibrephase[live=true]{line-color: #1F78B4;}',
+            cartocss: '#af_fibrephase{line-width:2;line-opacity:0.7;} #af_fibrephase[live=false]{line-color: #D6301D;} #af_fibrephase[live=true]{line-color: #FF9900;}',
             interactivity: ['cartodb_id','phase_name','operator','owner','iso2','orgname']
         },
         {
@@ -176,8 +176,8 @@
           var aftLegend = new cdb.geo.ui.Legend.Custom({
             title: "Fibre Status",
             data: [
-              { name: "Live",               value: "#FFFF00" },
-              { name: "Under Construction", value: "#FFAA00" }
+              { name: "Live",               value: "#FF9900" },
+              { name: "Under Construction", value: "#D6301D" }
             ]
           });
           $('#cartodb-map').append(aftLegend.render().el);
