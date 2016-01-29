@@ -14,6 +14,7 @@
   </style>
   <link rel="stylesheet" href="/css/afterfibre.css" />
 
+
   <script type="infowindow/html" id="aftinfo">
     <div class="cartodb-popup v2 orange">
       <a href="#close" class="cartodb-popup-close-button close">x</a>
@@ -86,20 +87,11 @@
 
   <!-- Header include and title are below -->
   <!--#set var="pagetitle" value="NSRC: Map of African Terrestrial Fibre Networks" -->
-  <!--#include virtual="/include/header.html" -->
 </head>
 
 <body>
-  <!-- Banner include goes here -->
-  <!--#include virtual="/include/banner.html" -->
-  <!-- ****** PAGE CONTENT GOES HERE -->
-  <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
-    <div id='cartodb-map'></div>
-
-  <!-- Footer include here -->
-  <!--#include virtual="/include/footer.html" -->
-  <!-- END FOOTER  -->
-  </div></div>
+  <div id='cartodb-map'></div>
+  <div id='nsrcTitle'><div id='mapTitle'>African Undersea and Terrestrial Fibre Optic Cables</div><a href="https://nsrc.org"><img src="/images/nsrc-main-logo-transparent.png"></a></div>
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
@@ -139,7 +131,7 @@
       // Choose center and zoom level
       var options = {
         center: [0, 20], // Africa
-        zoom: 4,
+        zoom: 5,
         legends: true
       };
       
@@ -223,7 +215,7 @@
               template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>'
           });
           $('#cartodb-map').append(aucTooltip.render().el);
-          
+         
         })
         .on('error', function(err) {
           // report error

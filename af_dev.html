@@ -90,11 +90,8 @@
 </head>
 
 <body>
-  <!-- Banner include goes here -->
-  <!-- ****** PAGE CONTENT GOES HERE -->
-  <h2 class="afterfibre">Map of African Terrestrial Fibre Networks</h2>
-    <div id='cartodb-map'></div>
-
+  <div id='cartodb-map'></div>
+  <div id='nsrcTitle'><div id='mapTitle'>African Undersea and Terrestrial Fibre Optic Cables</div><a href="https://nsrc.org"><img src="/images/nsrc-main-logo-transparent.png"></a></div>
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
@@ -134,7 +131,7 @@
       // Choose center and zoom level
       var options = {
         center: [0, 20], // Africa
-        zoom: 4,
+        zoom: 5,
         legends: true
       };
       
@@ -218,7 +215,7 @@
               template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>'
           });
           $('#cartodb-map').append(aucTooltip.render().el);
-          
+         
         })
         .on('error', function(err) {
           // report error
