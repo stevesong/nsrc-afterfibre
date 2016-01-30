@@ -92,7 +92,7 @@
 <body>
   <div id='cartodb-map'></div>
   <div id='nsrcTitle'><div id='mapTitle'>African Undersea and Terrestrial Fibre Optic Cables</div><a href="https://nsrc.org"><img src="/images/nsrc-main-logo-transparent.png"></a></div>
-  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script>
+  <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
       var layerSource = {
@@ -110,15 +110,32 @@
       };
 
       var af_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
+      var auc_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
       var af_polyline;
+      var auc_polyline;
 
       // function to highlight the selected polyline when clicked on
-      function showFeature(cartodb_id) {
+      function showAftGlow(cartodb_id) {
         af_sql.execute("select the_geom from af_fibrephase where cartodb_id = {{cartodb_id}}", {cartodb_id: cartodb_id} ).done(function(geojson) {
           if (af_polyline) {
             map_object.removeLayer(af_polyline);
           }
           af_polyline = L.geoJson(geojson, { 
+            style: {
+              color: "#0AF",
+              weight: 6,
+              opacity: 0.3
+            }
+          }).addTo(map_object);
+        });
+      }
+
+      function showAucGlow(cartodb_id) {
+        auc_sql.execute("select the_geom from auc where cartodb_id = {{cartodb_id}}", {cartodb_id: cartodb_id} ).done(function(geojson) {
+          if (auc_polyline) {
+            map_object.removeLayer(auc_polyline);
+          }
+          auc_polyline = L.geoJson(geojson, { 
             style: {
               color: "#0AF",
               weight: 6,
@@ -195,30 +212,36 @@
           $('#cartodb-map').append(stackedLegend.render().el);
 
           // mouseover information for terrestrial fibre
-          var aftTooltip = new cdb.geo.ui.Tooltip({
-              layer: aftLayer,
-              template: '<div class="cartodb-tooltip-content-wrapper"><img src="/flag/{{iso2}}.png"> <b>{{operator}}</b></div>', 
-              width: 600,
-              height: 50,
-              position: 'bottom|right'
-          });
-          $('#cartodb-map').append(aftTooltip.render().el);
-
-          // highlight the selected polyline when clicked on
-          layer.on('featureClick', function(e, pos, latlng, data) {
-            showFeature(data.cartodb_id);
+          layer.leafletMap.viz.addOverlay({
+            type: 'tooltip',
+            layer: aftLayer,
+            template: '<div class="cartodb-tooltip-content-wrapper"><img src="/flag/{{iso2}}.png"> <b>{{operator}}</b></div>', 
+            width: 200,
+            position: 'bottom|right',
+            fields: [{ name: 'operator' }]
           });
 
           // mouseover information for undersea fibre
-          var aucTooltip = new cdb.geo.ui.Tooltip({
-              layer: aucLayer,
-              template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>',
-              width: 600,
-              height: 50,
-              position: 'bottom|right'
+          layer.leafletMap.viz.addOverlay({
+            type: 'tooltip',
+            layer: aucLayer,
+            template: '<div class="cartodb-tooltip-content-wrapper"><b>{{name}}</b></div>', 
+            width: 200,
+            height: 50,
+            position: 'bottom|right',
+            fields: [{ name: 'name' }]
           });
-          $('#cartodb-map').append(aucTooltip.render().el);
-         
+
+          // highlight the selected polyline when clicked on
+          layer.on('featureClick', function(e, pos, latlng, data, aftLayer) {
+            showAftGlow(data.cartodb_id);
+          });   
+
+          // highlight the selected polyline when clicked on
+          layer.on('featureClick', function(e, pos, latlng, data, aucLayer) {
+            showAucGlow(data.cartodb_id);
+          });                   
+
         })
         .on('error', function(err) {
           // report error
