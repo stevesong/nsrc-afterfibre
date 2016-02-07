@@ -16,6 +16,7 @@
 
 
   <script type="infowindow/html" id="aftinfo">
+    var blah = {{country}}.replace(/\s+/g, '');
     <div class="cartodb-popup v2 orange">
       <a href="#close" class="cartodb-popup-close-button close">x</a>
       <div class="cartodb-popup-content-wrapper">
@@ -48,6 +49,9 @@
             <div class="rTableRow">
               <div class="rTableCellRight"><h4 style="color: green;">Source</h4></div><div class="rTableCell"><a href="{{source_url}}" target="_blank">map</a></div>
             </div>
+            <div class="rTableRow">
+              <div class="rTableCellRight"><h4 style="color: green;">Contribute</h4></div><div class="rTableCell"><a href="http://twitter.com/home?status=%23AfTerFibre map for {{phase_name}} {{orgname}} needs updating! %23 blah" target="_blank">Tweet a correction!</a></div>
+            </div>            
             <p></p>
           </div>
         </div>
@@ -91,7 +95,35 @@
 
 <body>
   <div id='cartodb-map'></div>
-  <div id='nsrcTitle'><div id='mapTitle'>African Undersea and Terrestrial Fibre Optic Cables</div><a href="https://nsrc.org"><img src="/images/nsrc-main-logo-transparent.png"></a></div>
+  <div id='nsrcTitle'>
+    <div class='mapTitle'>African Undersea and Terrestrial Fibre Optic Cables</div>
+    <div class='left'><a href="https://nsrc.org"><img src="/images/nsrc-main-logo-transparent.png"></a></div>
+    <div class='mapLinks'>
+      <div class='left'><a href="#aftAbout">About</a></div>
+      <div class='right'><a href="#aftContribute">Contribute</a></div>
+    </div>
+  </div>
+
+  <div id="aftAbout" class="modalDialog">
+      <div> <a href="#close" title="Close" class="close">X</a>
+
+            <h2>About AfTerFibre</h2>
+
+          <p>AfTerFibre or <i><span style="color: blue;">Af</span>rican <span style="color: blue;">Ter</span>restrial <span style="color: blue;">Fibre</span></i> is a map of African terrestrial (and now undersea) fibre optic infrastructure initiatives.  It was conceived of and developed by <a href="https://twitter.com/stevesong">Steve Song</a> with some initial support from Google and is now hosted and supported by the <a href="https://nsrc.org">Network Startup Resource Center</a></p>
+          <p>AfTerFibre is an Open Data initiative with data sources available for public download.  The dataset for the terrestrial fibre maps displayed can be <a href="https://afterfibre.cartodb.com/tables/af_fibrephase">downloaded in a variety of formats</a>, including CSV, SHP, KML, GEO JSON, and SVG</p>
+          <p>Maps for AfTerFibre are typically sourced as raster images, sometimes from the corporate websites of operators, sometimes from studies or reports on regional infrastructure development, and sometimes through personal contacts.  Maps that are not already available on the web are uploaded to a <a href="https://www.flickr.com/photos/ssong/albums/72157627195113720">Flickr website</a>.  The raster images are then digitally traced and converted into GIS format and uploaded to the <a href="http://www.cartodb.com">CartoDB</a>, a cloud-based GIS platform.</p>
+          <p>The source code for this website can be <a href="https://github.com/stevesong/nsrc-afterfibre/">found on Github</a> and is availabe under a <a href="https://en.wikipedia.org/wiki/GNU_General_Public_License">General Public License</a></p>
+      </div>
+  </div>
+  <div id="aftContribute" class="modalDialog">
+      <div> <a href="#close" title="Close" class="close">X</a>
+          <h2>Contribute to AfTerFibre</h2>
+          <p>There are many ways to contribute to the AfTerFibre map.  Perhaps the easiest way is to simply point out an error.  You can do this easily by tweeting with the hashtag #AfTerFibre. For convenience, when you click on an fibre segment, there is a link in the infowindow that will pre-populate a tweet with details of the segment you wish to have corrected.</p>
+          <p>Another way to contribute is to point out missing sources or more up-to-date map sources.  You can do that via <a href="http://twitter.com/home?status=%23AfTerFibre" target="_blank">twitter</a> or you can email <a href="mailto:stevesong@nsrc.org">me</a> directly.</p>
+          <p>If you're interested in helping improve the look and utility of the website, you can find the source code for it <a href="https://github.com/stevesong/nsrc-afterfibre/">on Github</a>.  Feel free to make suggestions, contribute, or fork the code for your own purposes.</p>
+          <p>There is also an <a href="https://groups.google.com/forum/#!forum/afterfibre">AfTerFibre Google Group</a> where you can ask questions and get more involved.</p>
+      </div>
+  </div>
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
