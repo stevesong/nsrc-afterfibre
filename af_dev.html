@@ -100,6 +100,7 @@
     <div class='mapLinks'>
       <div class='left'><a href="#aftAbout">About</a></div>
       <div class='right'><a href="#aftContribute">Contribute</a></div>
+      <div class='left'><a href="#topFiveContainer">Recent Updates</a></div>
     </div>
   </div>
 
@@ -123,6 +124,12 @@
           <p>There is also an <a href="https://groups.google.com/forum/#!forum/afterfibre">AfTerFibre Google Group</a> where you can ask questions and get more involved.</p>
       </div>
   </div>
+  <div id="topFiveContainer" class="modalDialog2">
+      <div> <a href="#close" title="Close" class="close">X</a>
+        <div id="topFiveList">
+        </div>
+      </div>
+  </div>
   <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
   <script type="text/javascript">
     function main() {
@@ -141,7 +148,8 @@
       };
 
       var af_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
-      var auc_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });
+      var auc_sql = new cartodb.SQL({ user: 'afterfibre', format: 'geojson' });      
+      var topFive_sql = new cartodb.SQL({ user: 'afterfibre' });
       var af_polyline;
       var auc_polyline;
 
@@ -175,6 +183,19 @@
           }).addTo(map_object);
         });
       }
+
+      // select 5 most recent entries updated on the map
+      var topFive = "<h2>Recent Updates</h2><table><tr><th>Country</th><th>Operator</th><th>Phase</th><th>Date Added</th></tr>";
+      topFive_sql.execute("SELECT cartodb_id,operator,country,phase_name,created_at FROM af_fibrephase ORDER BY cartodb_id DESC LIMIT 5").done(function(data){
+        for (i = 0; i < 5; i++) { 
+          topFive += '<tr><td>' + data.rows[i].country + '</td><td>' + data.rows[i].operator + '</td><td>' + data.rows[i].phase_name + '</td><td>' + data.rows[i].created_at.substring(0,10) + '</td></tr>';
+        }
+        topFive += "</table>";
+        div = document.getElementById( 'topFiveList' );
+        div.insertAdjacentHTML( 'beforeend', topFive );
+        console.log(topFive);
+      });         
+
 
       // Choose center and zoom level
       var options = {
